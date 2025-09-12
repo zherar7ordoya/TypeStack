@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible'
+          content='IE=edge'>
+
+    <title>Patrón Observador en JS</title>
+
+    <meta name='viewport'
+          content='width=device-width, initial-scale=1'>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <style>
+        .boxes {
+            width: 90%;
+            height: 140px;
+            padding: 5px;
+            margin: 10px auto;
+            background-color: #eeeeee;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            /*display: flex;*/
+        }
+
+        .boxes .nowrap {
+            -webkit-flex-wrap: nowrap;
+            -ms-flex-wrap: nowrap;
+            flex-wrap: nowrap;
+        }
+
+        .box {
+            background-color: #ccc;
+            margin: 10px;
+            width: 100%;
+            border: 1px solid;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <!-- Link to video tutorial -->
+    <br>
+    <a href="https://www.youtube.com/watch?v=pReYTx2frTQ"
+       target="_blank">Watch Video Tutorial</a>
+    <br><br>
+
+    <h1>Observer Pattern in JavaScript</h1>
+
+    <div>
+        <label>Text: </label>
+        <textarea style="width: 100%; height: 100px;"
+                  id="myText"></textarea>
+    </div>
+    <div class="boxes nowrap">
+        <div id="div1"
+             class="box"></div>
+        <div id="div2"
+             class="box"></div>
+        <div id="div3"
+             class="box"></div>
+    </div>
+
+</body>
+
+<script>
+
+    // --- Sujeto ---
+    class Subject {
+        constructor() {
+            this.observers = [];
+        }
+
+        subscribe(observer) {
+            this.observers.push(observer);
+        }
+
+        unsubscribe(observer) {
+            this.observers = this.observers.filter(o => o !== observer);
+        }
+
+        notify(value) {
+            for (const observer of this.observers) {
+                observer.notify(value);
+            }
+        }
+    }
+
+    // --- Preparar DOM ---
+    const div1 = document.getElementById("div1");
+    const div2 = document.getElementById("div2");
+    const div3 = document.getElementById("div3");
+
+    const textSubject = new Subject();
+
+    // --- Observadores ---
+    textSubject.subscribe({
+        notify: text => div1.innerHTML = text
+    });
+
+    textSubject.subscribe({
+        notify: text => div2.innerHTML = text.length
+    });
+
+    textSubject.subscribe({
+        notify: text => div3.innerHTML = text.includes("cerveza") ? "Salud!" : ":("
+    });
+
+    // --- Evento del textarea ---
+    document.getElementById("myText")
+        .addEventListener("input", e => textSubject.notify(e.target.value));
+
+</script>
+
+</html>

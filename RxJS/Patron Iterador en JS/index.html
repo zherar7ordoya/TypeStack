@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible'
+          content='IE=edge'>
+
+    <title>Patrón Iterador en JS</title>
+
+    <meta name='viewport'
+          content='width=device-width, initial-scale=1'>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+</head>
+
+<body class="container">
+
+    <!-- Link to video tutorial -->
+    <br>
+    <a href="https://www.youtube.com/watch?v=cgcqe6TNIzU"
+       target="_blank">Watch Video Tutorial</a>
+    <br><br>
+
+    <h1>Iterator Pattern in JavaScript</h1>
+
+</body>
+
+<script>
+
+    // --- Iterador moderno ---
+    class Iterator {
+        constructor(elements) {
+            this.elements = elements;
+            this.index = 0;
+        }
+
+        hasNext() {
+            return this.index < this.elements.length;
+        }
+
+        next() {
+            return this.elements[this.index++];
+        }
+
+        reset() {
+            this.index = 0;
+        }
+
+        // Para integrarlo con for...of si querés
+        [Symbol.iterator]() {
+            return {
+                next: () => {
+                    if (this.hasNext()) {
+                        return { value: this.next(), done: false };
+                    } else {
+                        return { done: true };
+                    }
+                }
+            };
+        }
+    }
+
+    const url = "https://jsonplaceholder.typicode.com/todos/";
+
+    // Array de funciones async
+    const elements = [];
+    
+    for (let id = 1; id <= 5; id++) {
+        elements.push(async () => {
+            const response = await fetch(url + id);
+            const data = await response.json();
+            return data;
+        });
+    }
+
+    const iterator = new Iterator(elements);
+
+    // --- Primera iteración ---
+    while (iterator.hasNext()) {
+        const element = iterator.next();
+        element().then(result => console.log(result));
+    }
+
+    // --- Reset ---
+    iterator.reset();
+
+    // --- Segunda iteración ---
+    while (iterator.hasNext()) {
+        const element = iterator.next();
+        element().then(result => console.log(result));
+    }
+
+    // --- Alternativa con for...of (opcional) ---
+    // for (const fn of iterator) {
+    //   fn().then(result => console.log(result));
+    // }
+</script>
+
+</html>
