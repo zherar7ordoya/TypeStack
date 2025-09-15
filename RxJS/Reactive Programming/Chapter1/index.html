@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prueba RxJS AJAX</title>
+  <script src="https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.min.js"></script>
+  <script src="https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.ajax.min.js"></script>
+</head>
+<body>
+  <h1>Prueba RxJS AJAX</h1>
+  <pre id="output"></pre>
+
+  <script>
+    const { ajax } = rxjs.ajax;
+
+    ajax("http://localhost:3000/api/contents.json").subscribe({
+      next: res => {
+        console.log(res.response);
+        document.getElementById("output").textContent =
+          JSON.stringify(res.response, null, 2);
+      },
+      error: err => console.error("Error:", err)
+    });
+  </script>
+</body>
+</html>
