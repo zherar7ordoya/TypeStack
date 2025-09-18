@@ -1,0 +1,13 @@
+{
+    "type": "module",
+    "dependencies": {
+        "leaflet": "^1.9.4",
+        "rxjs": "^7.8.2"
+    },
+    "devDependencies": {
+        "@types/node": "^24.3.3",
+        "json-server": "^1.0.0-beta.3",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.2"
+    }
+}
