@@ -1,7 +1,6 @@
 {
     "type": "module",
     "dependencies": {
-        "leaflet": "^1.9.4",
         "rxjs": "^7.8.2"
     },
     "devDependencies": {
