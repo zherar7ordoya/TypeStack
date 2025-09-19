@@ -88,11 +88,35 @@ quakes$.subscribe({
 
         const circle = L.circle([coords[1], coords[0]], { radius: size }).addTo(map);
 
-        const popupContent = 
-        `<strong>Magnitude:</strong> ${quake.properties.mag}<br>
+        const popupContent =
+            `<strong>Magnitude:</strong> ${quake.properties.mag}<br>
         <strong>Location:</strong> ${quake.properties.place}<br>
         <strong>Time:</strong> ${new Date(quake.properties.time).toLocaleString()}`;
-        
+
         circle.bindPopup(popupContent);
+    }
+});
+
+
+const counter$ = quakes$.pipe(
+
+    // Filtra solo los sismos ocurridos "hoy"
+    rxjs.operators.filter(quake => {
+        const quakeDate = new Date(quake.properties.time).toDateString();
+        const todayString = new Date().toDateString();
+        return quakeDate === todayString;
+    }),
+    // Acumula el total de sismos de hoy
+    rxjs.operators.scan(count => count + 1, 0)
+);
+
+const counterDiv = document.getElementById("quake-counter");
+
+counter$.subscribe({
+
+    next: count => {
+        counterDiv.textContent = `Earthquakes today: ${count}`;
+        counterDiv.classList.add("flash");
+        setTimeout(() => counterDiv.classList.remove("flash"), 500);
     }
 });

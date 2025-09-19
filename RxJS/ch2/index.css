@@ -1,0 +1,20 @@
+#quake-counter {
+    position: fixed;
+    top: 19px;
+    left: 56px;
+    font-size: 20px;
+    background: white;
+    padding: 8px 12px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    font-family: monospace;
+    z-index: 1000;
+    transition: background-color 0.5s;
+}
+
+/* Clase de parpadeo al recibir un nuevo sismo */
+#quake-counter.flash {
+    background-color: #ffeb3b;
+}
